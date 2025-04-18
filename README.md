@@ -84,14 +84,14 @@ const robotsTxt = generateRobotsTxt([
 		allow: ['/'],
 		disallow: ['/admin', '/login'],
 		crawlDelay: 1,
-		sitemap: 'https://example.com/sitemap.xml'
+		sitemap: ['https://example.com/sitemap.xml']
 	},
 	{
 		userAgent: 'Googlebot',
 		allow: ['/'],
 		disallow: ['/admin', '/login'],
 		crawlDelay: 1,
-		sitemap: 'https://example.com/sitemap.xml'
+		sitemap: ['https://example.com/sitemap.xml']
 	}
 ]
 );
