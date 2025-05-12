@@ -83,13 +83,13 @@ export interface MetaData {
  * @returns MetaDescriptor[] - Remix compatible meta tags
  */
 export const generateMeta = (metaData: MetaData, additionalData?: MetaDescriptor[]) => {
-	const { title, description, url, siteName, image, twitterCard } = metaData
+	const { title, description, url, siteName, image, twitterCard = "summary_large_image" } = metaData
 	return [
 		{ title },
 		{ property: "og:title", content: title },
 		{ property: "og:description", content: description },
 		{ property: "og:url", content: url },
-		{ name: "twitter:card", content: twitterCard ?? "summary_large_image" },
+		{ name: "twitter:card", content: twitterCard },
 		...(siteName ? [{ name: "og:site_name", content: siteName }] : []),
 		...(image ? [{ property: "og:image", content: image }] : []),
 		...(additionalData ?? []),
