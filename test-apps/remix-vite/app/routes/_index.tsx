@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => {
     title: "test",
     description: "test",
     url: "test",
+    image: "https://example.com/image.jpg",
+    twitterCard: "summary_large_image",
   }, [
     {
       "script:ld+json": article({

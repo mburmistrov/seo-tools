@@ -50,10 +50,6 @@ export interface MetaData {
 	 */
 	description: string
 	/**
-	 * The keywords of the page.
-	 */
-	keywords?: string[]
-	/**
 	 * The url of the page.
 	 * this generates the og:url meta tag.
 	 */
@@ -62,12 +58,19 @@ export interface MetaData {
 	 * The image of the page.
 	 * this generates the og:image meta tag.
 	 */
-	image?: string
+	image: string
 	/**
 	 * The site name of the page.
 	 * this generates the og:site_name meta tag.
 	 */
 	siteName?: string
+	/**
+	 * The twitter card type of the page.
+	 * this generates the twitter:card meta tag.
+	 * this is optional and will default to "summary_large_image".
+	 * @default "summary_large_image"
+	 */
+	twitterCard?: string
 }
 /**
  * Generate meta tags for Remix to be consumed by the meta function.
@@ -80,18 +83,15 @@ export interface MetaData {
  * @returns MetaDescriptor[] - Remix compatible meta tags
  */
 export const generateMeta = (metaData: MetaData, additionalData?: MetaDescriptor[]) => {
-	const { title, description, url, siteName, image, keywords } = metaData
+	const { title, description, url, siteName, image, twitterCard } = metaData
 	return [
 		{ title },
-		{ name: "twitter:title", content: title },
-		{ name: "og:title", content: title },
-		{ name: "description", content: description },
-		{ name: "twitter:description", content: description },
-		{ name: "og:description", content: description },
-		{ name: "og:url", content: url },
-		...(keywords ? [{ name: "keywords", content: keywords.join(", ") }] : []),
+		{ property: "og:title", content: title },
+		{ property: "og:description", content: description },
+		{ property: "og:url", content: url },
+		{ name: "twitter:card", content: twitterCard ?? "summary_large_image" },
 		...(siteName ? [{ name: "og:site_name", content: siteName }] : []),
-		...(image ? [{ name: "og:image", content: image }] : []),
+		...(image ? [{ property: "og:image", content: image }] : []),
 		...(additionalData ?? []),
 	]
 }
