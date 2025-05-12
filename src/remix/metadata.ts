@@ -58,7 +58,7 @@ export interface MetaData {
 	 * The image of the page.
 	 * this generates the og:image meta tag.
 	 */
-	image: string
+	image?: string
 	/**
 	 * The site name of the page.
 	 * this generates the og:site_name meta tag.
