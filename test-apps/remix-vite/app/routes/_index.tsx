@@ -10,7 +10,6 @@ export const meta: MetaFunction = () => {
     description: "test",
     url: "test",
     image: "https://picsum.photos/200/300",
-    twitterCard: "summary_large_image",
   }, [
     {
       "script:ld+json": article({

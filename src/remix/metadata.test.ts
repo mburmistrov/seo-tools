@@ -11,9 +11,9 @@ describe("generateMeta suite", () => {
 	const baseExpected = [
 		{ title: "Test Page" },
 		{ property: "og:title", content: "Test Page" },
-		{ property: "og:description", content: "This is a test page." },
+		{ property: "og:description", name: "description", content: "This is a test page." },
 		{ property: "og:url", content: "https://example.com" },
-		{ name: "twitter:card", content: "summary_large_image" },
+		{ name: "twitter:card", property: "twitter:card", content: "summary_large_image" },
 	]
 
 	it("generates meta tags with required fields", () => {
@@ -36,7 +36,7 @@ describe("generateMeta suite", () => {
 	it("uses custom twitterCard if provided", () => {
 		const metaData = { ...baseMetaData, twitterCard: "summary" }
 		const expected = baseExpected.map((tag) =>
-			tag.name === "twitter:card" ? { name: "twitter:card", content: "summary" } : tag
+			tag.name === "twitter:card" ? { name: "twitter:card", property: "twitter:card", content: "summary" } : tag
 		)
 		expect(generateMeta(metaData)).toEqual(expected)
 	})

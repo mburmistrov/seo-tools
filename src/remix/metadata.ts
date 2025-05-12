@@ -87,9 +87,9 @@ export const generateMeta = (metaData: MetaData, additionalData?: MetaDescriptor
 	return [
 		{ title },
 		{ property: "og:title", content: title },
-		{ property: "og:description", content: description },
+		{ property: "og:description", name: "description", content: description },
 		{ property: "og:url", content: url },
-		{ name: "twitter:card", content: twitterCard },
+		{ name: "twitter:card", property: "twitter:card", content: twitterCard },
 		...(siteName ? [{ name: "og:site_name", content: siteName }] : []),
 		...(image ? [{ property: "og:image", content: image }] : []),
 		...(additionalData ?? []),
