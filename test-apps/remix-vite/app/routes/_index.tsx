@@ -9,6 +9,7 @@ export const meta: MetaFunction = () => {
     title: "test",
     description: "test",
     url: "test",
+    image: "https://picsum.photos/200/300",
   }, [
     {
       "script:ld+json": article({
