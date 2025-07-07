@@ -1,6 +1,10 @@
 import type { Route, RouteManifest, ServerRoute } from "@remix-run/server-runtime/dist/routes.js"
 import { type SitemapEntry, type SitemapRoute, generateSitemap } from "../sitemap"
 
+interface InternalServerRoute extends Omit<ServerRoute, "children"> {
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	module: any
+}
 export type SitemapFunctionReturnData = SitemapEntry | SitemapEntry[]
 
 export type SitemapFunctionReturn = Promise<SitemapFunctionReturnData> | SitemapFunctionReturnData
@@ -30,7 +34,7 @@ const convertRemixPathToUrl = (routes: RouteManifest<Route | undefined>, route: 
 	return output === "" ? "/" : output
 }
 
-const createExtendedRoutes = (routes: RouteManifest<Omit<ServerRoute, "children"> | undefined>) => {
+const createExtendedRoutes = (routes: RouteManifest<InternalServerRoute | undefined>) => {
 	return Object.values(routes).map((route) => {
 		return {
 			...route,
@@ -45,7 +49,7 @@ const generateRemixSitemapRoutes = async ({
 }: {
 	domain: string
 	sitemapData?: unknown
-	routes: RouteManifest<Omit<ServerRoute, "children"> | undefined>
+	routes: RouteManifest<InternalServerRoute | undefined>
 }) => {
 	// Add the url to each route
 	const extendedRoutes = createExtendedRoutes(routes)
@@ -97,7 +101,7 @@ export interface RemixSitemapInfo {
 	/**
 	 * The routes object from the remix server build. If not provided, the utility will try to import it.
 	 */
-	routes: RouteManifest<Omit<ServerRoute, "children"> | undefined>
+	routes: RouteManifest<InternalServerRoute | undefined>
 }
 
 /**
