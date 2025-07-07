@@ -30,7 +30,7 @@ const convertRemixPathToUrl = (routes: RouteManifest<Route | undefined>, route: 
 	return output === "" ? "/" : output
 }
 
-const createExtendedRoutes = (routes: RouteManifest<ServerRoute | undefined>) => {
+const createExtendedRoutes = (routes: RouteManifest<Omit<ServerRoute, "children"> | undefined>) => {
 	return Object.values(routes).map((route) => {
 		return {
 			...route,
@@ -45,7 +45,7 @@ const generateRemixSitemapRoutes = async ({
 }: {
 	domain: string
 	sitemapData?: unknown
-	routes: RouteManifest<ServerRoute | undefined>
+	routes: RouteManifest<Omit<ServerRoute, "children"> | undefined>
 }) => {
 	// Add the url to each route
 	const extendedRoutes = createExtendedRoutes(routes)
@@ -97,7 +97,7 @@ export interface RemixSitemapInfo {
 	/**
 	 * The routes object from the remix server build. If not provided, the utility will try to import it.
 	 */
-	routes: RouteManifest<ServerRoute | undefined>
+	routes: RouteManifest<Omit<ServerRoute, "children"> | undefined>
 }
 
 /**
