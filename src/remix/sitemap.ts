@@ -16,8 +16,8 @@ export type SitemapFunction<T> = (
 	sitemapData: T
 ) => Promise<SitemapFunctionReturnData> | SitemapFunctionReturnData
 
-const convertRemixPathToUrl = (routes: RouteManifest<Route>, route: Route) => {
-	let currentRoute: Route | null = route
+const convertRemixPathToUrl = (routes: RouteManifest<Route | undefined>, route: Route | undefined) => {
+	let currentRoute: Route | undefined | null = route
 	const path = []
 
 	while (currentRoute) {
@@ -30,7 +30,7 @@ const convertRemixPathToUrl = (routes: RouteManifest<Route>, route: Route) => {
 	return output === "" ? "/" : output
 }
 
-const createExtendedRoutes = (routes: RouteManifest<ServerRoute>) => {
+const createExtendedRoutes = (routes: RouteManifest<ServerRoute | undefined>) => {
 	return Object.values(routes).map((route) => {
 		return {
 			...route,
@@ -45,20 +45,10 @@ const generateRemixSitemapRoutes = async ({
 }: {
 	domain: string
 	sitemapData?: unknown
-	routes?: RouteManifest<ServerRoute>
+	routes: RouteManifest<ServerRoute | undefined>
 }) => {
-	let finalRoutes = routes
-	if (!finalRoutes) {
-		// @ts-expect-error - This import exists but is not picked up by the typescript compiler because it's a remix internal
-		const { routes } = await import("virtual:remix/server-build").catch(() => {
-			throw new Error(
-				"Could not find the remix server build. Make sure you have Remix running on Vite and not in SPA mode. Otherwise use the generateSitemap utility."
-			)
-		})
-		finalRoutes = routes
-	}
 	// Add the url to each route
-	const extendedRoutes = createExtendedRoutes(finalRoutes as unknown as RouteManifest<ServerRoute>)
+	const extendedRoutes = createExtendedRoutes(routes)
 
 	const transformedRoutes = await Promise.all(
 		extendedRoutes.map(async (route) => {
@@ -66,7 +56,7 @@ const generateRemixSitemapRoutes = async ({
 			// We don't want to include the root route in the sitemap
 			if (route.id === "root") return
 			// If the route has a module, get the handle
-			const handle = route.module.handle
+			const handle = route.module?.handle
 			// If the route has a sitemap function, call it and return the sitemap entries
 			if (handle && typeof handle === "object" && "sitemap" in handle && typeof handle.sitemap === "function") {
 				// Type the function just in case
@@ -107,7 +97,7 @@ export interface RemixSitemapInfo {
 	/**
 	 * The routes object from the remix server build. If not provided, the utility will try to import it.
 	 */
-	routes?: RouteManifest<ServerRoute>
+	routes: RouteManifest<ServerRoute | undefined>
 }
 
 /**
